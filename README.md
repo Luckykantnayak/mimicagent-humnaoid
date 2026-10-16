@@ -19,7 +19,7 @@
 </div>
 
 <p align="center">
-  <img src="docs/media/g1-mimicagent-mosaic.gif" width="100%" alt="Animated mosaic of ten MimicAgent-generated Unitree G1 skills, including scene interaction and parkour." />
+  <img src="docs/media/g1-mimicagent-mosaic.gif" width="100%" alt="Animated mosaic of ten MimicAgent-generated Unitree G1 skills, including a close-up hurdle flip, stair climbing, scene interaction, and parkour." />
   <br />
   <sub>MimicAgent-generated Unitree G1 reference motions · Kinematic previews</sub>
 </p>
