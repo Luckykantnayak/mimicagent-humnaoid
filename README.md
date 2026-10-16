@@ -18,6 +18,12 @@
 
 </div>
 
+<p align="center">
+  <img src="docs/media/g1-handauthored-mosaic.gif" width="100%" alt="Animated mosaic of twelve hand-authored Unitree G1 skills, including scene interaction and parkour." />
+  <br />
+  <sub>Hand-authored Unitree G1 reference motions · Kinematic previews</sub>
+</p>
+
 ---
 
 [Overview](#overview) · [Installation](#installation) · [Generate](#generate-a-skill) · [Replay](#replay) · [Checks](#optional-ui-and-checks)
