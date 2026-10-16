@@ -244,3 +244,6 @@ MUJOCO_LOG.TXT
 /.agents
 /.claude
 /.codex
+
+# Local skill-authoring guide
+/docs/SKILL_GUIDE.md
