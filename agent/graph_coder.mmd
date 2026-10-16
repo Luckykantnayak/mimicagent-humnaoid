@@ -1,0 +1,42 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	skill_filter_agent(skill_filter_agent)
+	rejected_agent(rejected_agent)
+	goal_contract_agent(goal_contract_agent)
+	motion_planner_agent(motion_planner_agent)
+	code_generator_agent(code_generator_agent)
+	code_executer_agent(code_executer_agent)
+	unit_test_router(unit_test_router)
+	unit_test_agent(unit_test_agent)
+	critic_router(critic_router)
+	motion_diagnosis_agent(motion_diagnosis_agent)
+	critic_coder_agent(critic_coder_agent)
+	finalize_agent(finalize_agent)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> goal_contract_agent;
+	code_executer_agent --> unit_test_router;
+	code_generator_agent --> code_executer_agent;
+	critic_coder_agent --> code_executer_agent;
+	critic_router -. &nbsp;end_skill&nbsp; .-> finalize_agent;
+	critic_router -. &nbsp;loop&nbsp; .-> motion_diagnosis_agent;
+	critic_router -. &nbsp;replan&nbsp; .-> motion_planner_agent;
+	goal_contract_agent --> skill_filter_agent;
+	motion_diagnosis_agent --> critic_coder_agent;
+	motion_planner_agent --> code_generator_agent;
+	skill_filter_agent -. &nbsp;continue&nbsp; .-> motion_planner_agent;
+	skill_filter_agent -. &nbsp;end_skill&nbsp; .-> rejected_agent;
+	unit_test_agent --> critic_router;
+	unit_test_router -. &nbsp;repair&nbsp; .-> critic_coder_agent;
+	unit_test_router -. &nbsp;end_skill&nbsp; .-> finalize_agent;
+	unit_test_router -. &nbsp;replan&nbsp; .-> motion_planner_agent;
+	unit_test_router -. &nbsp;continue&nbsp; .-> unit_test_agent;
+	finalize_agent --> __end__;
+	rejected_agent --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

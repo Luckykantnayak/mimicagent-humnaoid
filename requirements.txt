@@ -1,0 +1,28 @@
+# Agent (LLM orchestration)
+langgraph
+langchain-core
+langchain-anthropic
+langchain-openai
+
+# Simulator (MuJoCo kinematic motion generation)
+mujoco
+glfw
+scipy
+
+# Optional IK backend: IK_BACKEND=mink solves the per-frame IK as a QP with joint
+# position + velocity limits and collision avoidance as HARD constraints. Not the
+# default (see simulator/utils/kinematics.py:make_ik for the measured trade-off);
+# the simulator degrades to the built-in DLS solver with a warning if absent.
+# mink
+# qpsolvers[daqp]
+
+# Shared
+numpy
+PyYAML
+
+# Skill analysis (optional)
+scikit-learn
+matplotlib
+
+# Interactive demo UI (optional)
+streamlit

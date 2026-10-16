@@ -1,0 +1,33 @@
+dataset:
+  total_skills: 100
+  skills_per_generation: 20
+
+llm:
+  model: claude-sonnet-5-5
+  # No temperature: Sonnet 5.5 rejects non-default sampling parameters.
+  thinking: adaptive    # adaptive | disabled. Adaptive thinking for planning/coding; BaseAgent
+                        # strips thinking blocks so every node still parses plain text.
+  effort: high          # low | medium | high | xhigh | max
+  max_tokens: 64000     # thinking tokens count against this ceiling, and the STAIRS plan alone
+                        # is ~14.7k tokens. A truncated reply is retried (BaseAgent), never parsed.
+  timeout_s: 600        # per request; responses stream, so this bounds a stalled connection
+  refusal_fallback: false  # keep evaluation calls on the explicitly selected model
+
+robot:
+  name: humanoid               # must match a robots/<name>/ directory
+
+paths:
+  prompts_dir: prompts
+  robots_dir: ../robots
+  simulator_dir: ..                       # repo root (where simulator/run.py is invoked)
+  skill_output_dir: ../skill_output       # generated per-robot: <robot>/<skill>/
+
+simulator:
+  python_bin: python
+  timeout_s: 300
+
+critic:
+  max_iters: 10          # raised 7->10: measured on a carry-box regeneration, the loop
+                       # was still improving BOTH the plan (reach over-reach 1.71x->1.35x)
+                       # and the motion when it hit the cap. The floor alone can consume 5,
+                       # and the once-only replan needs room after it.

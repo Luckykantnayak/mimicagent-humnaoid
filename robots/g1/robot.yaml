@@ -1,0 +1,278 @@
+# Reviewed G1 model-derived specification. Joint order follows qpos[7:].
+name: g1
+scene_xml: assets/scenes/flat.xml
+mjcf: assets/robots/g1/g1.xml
+base_body: pelvis
+sim_freq: 200
+null_space_gain: 0.02
+end_effectors:
+- name: left_foot
+  body: left_ankle_roll_link
+  site: ee_left_foot
+  ground_offset: 0.035
+- name: right_foot
+  body: right_ankle_roll_link
+  site: ee_right_foot
+  ground_offset: 0.035
+- name: left_hand
+  body: left_hand_contact
+  site: ee_left_hand
+  ground_offset: 0.025
+  contact: false
+- name: right_hand
+  body: right_hand_contact
+  site: ee_right_hand
+  ground_offset: 0.025
+  contact: false
+joints:
+- name: left_hip_pitch_joint
+  limits:
+  - -2.5307
+  - 2.8798
+- name: left_hip_roll_joint
+  limits:
+  - -0.5236
+  - 2.9671
+- name: left_hip_yaw_joint
+  limits:
+  - -2.7576
+  - 2.7576
+- name: left_knee_joint
+  limits:
+  - -0.0873
+  - 2.8798
+- name: left_ankle_pitch_joint
+  limits:
+  - -0.8727
+  - 0.5236
+- name: left_ankle_roll_joint
+  limits:
+  - -0.2618
+  - 0.2618
+- name: right_hip_pitch_joint
+  limits:
+  - -2.5307
+  - 2.8798
+- name: right_hip_roll_joint
+  limits:
+  - -2.9671
+  - 0.5236
+- name: right_hip_yaw_joint
+  limits:
+  - -2.7576
+  - 2.7576
+- name: right_knee_joint
+  limits:
+  - -0.0873
+  - 2.8798
+- name: right_ankle_pitch_joint
+  limits:
+  - -0.8727
+  - 0.5236
+- name: right_ankle_roll_joint
+  limits:
+  - -0.2618
+  - 0.2618
+- name: waist_yaw_joint
+  limits:
+  - -2.618
+  - 2.618
+- name: waist_roll_joint
+  limits:
+  - -0.52
+  - 0.52
+- name: waist_pitch_joint
+  limits:
+  - -0.52
+  - 0.52
+- name: left_shoulder_pitch_joint
+  limits:
+  - -3.0892
+  - 2.6704
+- name: left_shoulder_roll_joint
+  limits:
+  - -1.5882
+  - 2.2515
+- name: left_shoulder_yaw_joint
+  limits:
+  - -2.618
+  - 2.618
+- name: left_elbow_joint
+  limits:
+  - -1.0472
+  - 2.0944
+- name: left_wrist_roll_joint
+  limits:
+  - -1.9722
+  - 1.9722
+- name: left_wrist_pitch_joint
+  limits:
+  - -1.6144
+  - 1.6144
+- name: left_wrist_yaw_joint
+  limits:
+  - -1.6144
+  - 1.6144
+- name: right_shoulder_pitch_joint
+  limits:
+  - -3.0892
+  - 2.6704
+- name: right_shoulder_roll_joint
+  limits:
+  - -2.2515
+  - 1.5882
+- name: right_shoulder_yaw_joint
+  limits:
+  - -2.618
+  - 2.618
+- name: right_elbow_joint
+  limits:
+  - -1.0472
+  - 2.0944
+- name: right_wrist_roll_joint
+  limits:
+  - -1.9722
+  - 1.9722
+- name: right_wrist_pitch_joint
+  limits:
+  - -1.6144
+  - 1.6144
+- name: right_wrist_yaw_joint
+  limits:
+  - -1.6144
+  - 1.6144
+base_height_range:
+- 0.27
+- 1.96
+camera:
+  lookat:
+  - 0.0
+  - 0.0
+  - 0.78
+  distance: 3.3
+  azimuth: 90
+  elevation: -15
+example_skill: robots/g1/example.py
+robot_card: "Unitree G1 humanoid biped, 29 actuated joints, with a fixed head and rubber hands (no finger\
+  \ joints). World x is forward, y is left, z is up. 29-DoF robot. Base body `pelvis` stands ~0.78 m at\
+  \ the home pose.\nEnd-effectors:\n    - left_foot (body left_ankle_roll_link)\n    - right_foot (body\
+  \ right_ankle_roll_link)\n    - left_hand (body left_hand_contact)\n    - right_hand (body right_hand_contact)\n\
+  Actuated joints (axis sign, range):\n    - left_hip_pitch_joint: axis +y, range [-2.53, 2.88] rad\n\
+  \    - left_hip_roll_joint: axis +x, range [-0.52, 2.97] rad\n    - left_hip_yaw_joint: axis +z, range\
+  \ [-2.76, 2.76] rad\n    - left_knee_joint: axis +y, range [-0.09, 2.88] rad\n    - left_ankle_pitch_joint:\
+  \ axis +y, range [-0.87, 0.52] rad\n    - left_ankle_roll_joint: axis +x, range [-0.26, 0.26] rad\n\
+  \    - right_hip_pitch_joint: axis +y, range [-2.53, 2.88] rad\n    - right_hip_roll_joint: axis +x,\
+  \ range [-2.97, 0.52] rad\n    - right_hip_yaw_joint: axis +z, range [-2.76, 2.76] rad\n    - right_knee_joint:\
+  \ axis +y, range [-0.09, 2.88] rad\n    - right_ankle_pitch_joint: axis +y, range [-0.87, 0.52] rad\n\
+  \    - right_ankle_roll_joint: axis +x, range [-0.26, 0.26] rad\n    - waist_yaw_joint: axis +z, range\
+  \ [-2.62, 2.62] rad\n    - waist_roll_joint: axis +x, range [-0.52, 0.52] rad\n    - waist_pitch_joint:\
+  \ axis +y, range [-0.52, 0.52] rad\n    - left_shoulder_pitch_joint: axis +y, range [-3.09, 2.67] rad\n\
+  \    - left_shoulder_roll_joint: axis +x, range [-1.59, 2.25] rad\n    - left_shoulder_yaw_joint: axis\
+  \ +z, range [-2.62, 2.62] rad\n    - left_elbow_joint: axis +y, range [-1.05, 2.09] rad\n    - left_wrist_roll_joint:\
+  \ axis +x, range [-1.97, 1.97] rad\n    - left_wrist_pitch_joint: axis +y, range [-1.61, 1.61] rad\n\
+  \    - left_wrist_yaw_joint: axis +z, range [-1.61, 1.61] rad\n    - right_shoulder_pitch_joint: axis\
+  \ +y, range [-3.09, 2.67] rad\n    - right_shoulder_roll_joint: axis +x, range [-2.25, 1.59] rad\n \
+  \   - right_shoulder_yaw_joint: axis +z, range [-2.62, 2.62] rad\n    - right_elbow_joint: axis +y,\
+  \ range [-1.05, 2.09] rad\n    - right_wrist_roll_joint: axis +x, range [-1.97, 1.97] rad\n    - right_wrist_pitch_joint:\
+  \ axis +y, range [-1.61, 1.61] rad\n    - right_wrist_yaw_joint: axis +z, range [-1.61, 1.61] rad\n\n\
+  Both knees and elbows flex with positive angles; do not mirror their signs. Negative hip pitch swings\
+  \ the thigh forward. Shoulder roll spreads the left arm with a positive angle and right arm with a negative\
+  \ angle. Home joint angles: hip pitch -0.1, knee 0.3, ankle pitch -0.2, elbow 0.45, left shoulder roll\
+  \ 0.12, right shoulder roll -0.12; all others zero. Contact-body offsets are radius proxies; explicit\
+  \ body-local contact points may represent other faces. Pelvis contact origin is 0.0786 m below the free\
+  \ root. Head has no independently actuated neck.\n"
+environments:
+- name: hurdle
+  scene: assets/scenes/hurdle_tall.xml
+  grounding: 'off'
+  objects: []
+  description: A fixed hurdle across the path, 0.82 m tall (above half the approximately 1.36 m standing
+    robot height), centered at x=3.40 m with a long approach from the origin. Exact collision geometry
+    is supplied from the scene XML.
+- name: tall_ledge
+  scene: assets/scenes/slab_tall.xml
+  grounding: 'off'
+  objects: []
+  description: A solid platform 0.82 m tall (above half the approximately 1.36 m standing robot height),
+    with its front face at x=1.05 m. Its top is a support surface; its front and side faces are solid
+    collision surfaces.
+- name: carry_box
+  scene: assets/scenes/carry.xml
+  grounding: 'off'
+  objects:
+  - name: box
+    type: box
+    half_size: 0.12
+    rest_pos:
+    - 1.1
+    - 0.0
+    - 0.12
+    description: "A MOVABLE crate resting on the floor ahead (exact pose in the scene geometry). It affords\
+      \ the CARRY topology \u2014 grip it at its faces (the hands must REACH the grip point, not float\
+      \ short), declare it held (attachments), move it, release it. Where it goes is the skill's goal;\
+      \ derive the stance from the box coordinates + arm reach."
+  description: "A MOVABLE crate on the floor ahead. Grounding off. The GOAL comes from the skill intent\
+    \ \u2014 apply the CARRY goal-state topology from the planner laws, taking coordinates from the scene\
+    \ geometry."
+- name: stairs
+  scene: assets/scenes/stairs.xml
+  grounding: 'off'
+  objects: []
+  description: "A staircase ahead: a series of SOLID steps, each tread a support surface, each riser a\
+    \ collision face (exact profile in the scene geometry). Grounding off \u2014 author feet in the WORLD\
+    \ frame and the base absolutely. The GOAL comes from the skill intent (climb the stairs, ...) \u2014\
+    \ apply the matching GOAL-STATE TOPOLOGY from the planner laws, taking coordinates from the scene\
+    \ geometry."
+- name: ledge
+  scene: assets/scenes/slab.xml
+  grounding: 'off'
+  objects: []
+  description: "A raised platform (slab/ledge) ahead: a SOLID block whose TOP is a support surface and\
+    \ whose FACES are collision walls (exact geometry + front-face collision clearance in the scene geometry).\
+    \ Grounding off \u2014 author feet/hands in the WORLD frame and the base absolutely. The GOAL comes\
+    \ from the skill intent (climb onto it, vault it, ...) \u2014 apply the matching GOAL-STATE TOPOLOGY\
+    \ from the planner laws, taking coordinates from the scene geometry."
+- name: chair
+  scene: assets/scenes/chair.xml
+  grounding: 'off'
+  objects: []
+  description: "A chair ahead: a SEAT panel (a support surface) and a BACKREST panel, both SOLID to the\
+    \ floor (exact geometry in the scene geometry). Grounding off \u2014 author the base absolutely. The\
+    \ GOAL comes from the skill intent (sit on it, climb it, ...) \u2014 apply the matching GOAL-STATE\
+    \ TOPOLOGY from the planner laws, taking all coordinates from the scene geometry."
+exemplars: []
+kind: humanoid
+contact_bodies:
+- name: pelvis
+  body: pelvis_contact
+  ground_offset: 0.065
+- name: torso
+  body: torso_contact
+  ground_offset: 0.08
+- name: head
+  body: head_contact
+  ground_offset: 0.08
+- name: left_knee
+  body: left_knee_link
+  ground_offset: 0.045
+- name: left_thigh
+  body: left_hip_yaw_link
+  ground_offset: 0.045
+- name: left_forearm
+  body: left_elbow_link
+  ground_offset: 0.035
+- name: left_upper_arm
+  body: left_shoulder_yaw_link
+  ground_offset: 0.035
+- name: right_knee
+  body: right_knee_link
+  ground_offset: 0.045
+- name: right_thigh
+  body: right_hip_yaw_link
+  ground_offset: 0.045
+- name: right_forearm
+  body: right_elbow_link
+  ground_offset: 0.035
+- name: right_upper_arm
+  body: right_shoulder_yaw_link
+  ground_offset: 0.035

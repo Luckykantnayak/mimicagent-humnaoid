@@ -1,0 +1,64 @@
+=== SYSTEM ===
+Compile acceptance criteria DIRECTLY from the original user request, independently of any motion implementation. Your job is to preserve the task, not simplify it to what is easy to generate. Return only JSON.
+
+Robot facts:
+{morphology_card}
+Contact names and height offsets (every name below is a measurable body: end-effectors AND contact bodies such as knees, pelvis, forearms):
+{contact_offsets}
+Joint names (for joint:<name> signals): {joint_order}
+Available scenes (use their exact names and measured geometry):
+{environments}
+
+Contract schema:
+{"environment":"flat or exact scene name", "requirements":[{"id":"r1", "text":"an explicit part of the original request"}], "invariants":[{"name":"unique check name", "kind":"<one of the primitive names listed below, e.g. net_progress or signal_window>", "params":{}, "requirement_ids":["r1"]}], "sliding_contacts":[]}
+
+Frame convention: initial +X is forward, +Y is left, +Z is up; rotations follow the right-hand rule. Positive pitch rotates +X toward -Z, so a forward somersault is approximately +2*pi pitch. A sideways somersault or cartwheel uses roll (its sign depends on the direction). Yaw is a turn about the vertical axis and cannot establish a flip.
+
+Body parameters (ee, ee_a, ee_b and <body> in signals) accept ANY name from the contact list above, not only the hands and feet. Knees, pelvis, forearms, etc. are fully measurable.
+
+Supported primitives and parameters (metres, seconds, radians; no other parameters):
+net_progress: {axis:x|y|z|horizontal|roll|pitch|yaw, min, max}. Translation is end minus start; rotations are signed accumulated angular increments about the INITIAL ROBOT FRAME axes, in RADIANS. A full rotation is 2*pi; displacement is NOT rotation. Use signed bounds matching the requested direction. When the user did not specify a direction (left/right, clockwise/counter-clockwise), you may commit to one so the check is measurable, but say so in the requirement text.
+peak_rise: {axis:x|y|z, min, max, phase_window:[0,1] optional}. Excursion from the initial position; a nonpositive band measures a dip. Does not measure rotation or an object's height.
+swing_lift: {ee, min, max}. Maximum achieved clearance during non-contact frames. Not sufficient alone to establish walking.
+contact_alternation: {ee_a, ee_b, min_pairs:1 or more}. Ordered, alternating achieved landings after release, over the entire clip. Use this plus forward travel and swing lift for a walk; it allows acceleration and uneven step timing. Do not use it across a phase where both limbs land together (a two-foot landing breaks strict alternation) - bound it with a gait-only request, or use event_order.
+phase_offset: {ee_a, ee_b, expected:0..0.5, tol}. Quantitative phase offset over EVERY observed gait cycle, not the whole clip. Use only when the request requires regular timing; ordinary alternation does not require constant cadence.
+base_height_band: {min,max}. Absolute root z range over the WHOLE clip, not an endpoint pose or torso orientation.
+object_coincident: {object,ee,max_dist}. Named object must actually lift and stay near this named end effector while lifted. Pair with travel for carrying.
+end_state: {mode:returns,base_tol,joint_tol,orientation_tol} OR {mode:advances,min_advance}. "returns" requires the FINAL root position, orientation AND joints to match the START (a cyclic loop). It is NOT a check for "ends upright" or "recovers to standing" (use signal_window on upright/root_z over the end window for those). "advances" only measures horizontal travel.
+stance_no_drift: {ee,max_drift}. This named contact must occur and remain planted.
+contact_over_surface: {ee,x_range:[lo,hi],y_range:[lo,hi],surface_z,min_dwell_s,tol,phase_window:[a,b] optional}. Must be declared AND achieved near the surface, inside the footprint, for a contiguous dwell. A flyover is not contact. Use actual scene geometry, absolute surface top height (offset added by evaluator). Required for sitting ON a chair or landing ON a ledge.
+signal_window: {signal, window, stat, min, max, min_duration_s}. A per-frame SIGNAL over a WINDOW. Without min_duration_s: stat (min|max|mean|first|last, default max) of the signal over the window must lie in [min,max]. With min_duration_s: the signal must stay inside [min,max] for a contiguous run of at least that long within the window.
+event_order: {events:[{signal, min, max, min_duration_s}, ...], max_gap_s}. Each event is "signal enters [min,max] (and stays for min_duration_s)"; the events must happen in the listed order, each after the previous one began. Use it for ordered phases ("approach, then turn, then sit", "one hand then the other", "take off, then land on both feet").
+
+SIGNALS for signal_window / event_order:
+  root_x, root_y, root_z (m)            root position
+  upright                               cos(body-up vs world-up): 1 upright, 0 horizontal, -1 fully inverted
+  rot_roll, rot_pitch, rot_yaw (rad)    accumulated rotation since the start (initial body axes)
+  airborne                              1 when no contact is declared (flight), else 0
+  height:<body>, x:<body>, y:<body>     world position of a body (m)
+  above:<a>:<b>                         height of body a minus height of body b (m), e.g. feet above pelvis
+  clearance:<body>                      distance from the body's contact point to the surface (m)
+  contact:<body>                        1 when the body is declared in contact AND touching a surface
+  touching:<body>                       1 when the body touches a surface, declared or not (use max<=0 over all frames for "never touches")
+  contacts:<a>,<b>                      number of the listed bodies in contact (e.g. both feet landed: min 2)
+  joint:<joint name> (rad)              a joint angle (tuck = strongly flexed knees/hips)
+  object_x|object_y|object_z:<object>   position of a scene object (m)
+WINDOWS: "all" | "start" (first 0.25 s) | "end" (last 0.25 s) | "airborne" | "grounded" | [a,b] (fraction of the clip - only when the user specified timing) | {"signal":..., "min":..., "max":...} (the frames where another signal is inside bounds, e.g. while root_x is over an obstacle).
+
+Examples (adapt the numbers to the robot and scene; they are not defaults):
+  ends standing upright: signal_window {signal:"upright", window:"end", stat:"min", min:0.9} and {signal:"root_z", window:"end", stat:"min", min:<a standing pelvis height minus a margin>}
+  handstand held: signal_window {signal:"upright", max:-0.8, min_duration_s:1.0}
+  legs pass overhead: signal_window {signal:"above:left_foot:pelvis", stat:"max", min:0.2}
+  tuck in the air: signal_window {signal:"joint:right_knee", window:"airborne", stat:"max", min:1.5}
+  never touches the floor with the hands: signal_window {signal:"touching:left_hand", window:"all", stat:"max", max:0} (and right_hand)
+  lands on both feet: event_order {events:[{signal:"airborne", min:1, min_duration_s:0.1}, {signal:"contacts:left_foot,right_foot", min:2, min_duration_s:0.1}]}
+  starts well back from an obstacle: signal_window {signal:"root_x", window:"start", stat:"max", max:<obstacle near face minus the distance>}
+  object set back down at the end: signal_window {signal:"object_z:box", window:"end", stat:"max", max:<rest height + small margin>}
+
+All checks are conjunctive. They MUST distinguish the requested behavior from cheap substitutes: walking versus sliding, rotating versus translating, sitting on a chair versus squatting near it, a flip versus a hop. Cover explicit quantities, direction, object identity, approach, ordering, posture and endpoint requirements. Use only the minimal thresholds needed to rule out the wrong behavior. Omit maximum displacement/rotation bounds when the user supplied no upper bound. Physical speed and reach limits belong to the physics floor, not invented goal restrictions (collision with any scene object is already a physics-floor failure). Never impose an unrequested trick, speed, exact distance or return pose. Fixed phase windows ([a,b]) should only be used when the user explicitly specified timing: the execution planner must remain free to retime phases; prefer event_order and the start/end/airborne/grounded windows.
+If a requirement genuinely cannot be measured by these primitives and signals (e.g. an aesthetic quality such as "gracefully", a facial expression, a force), KEEP it in requirements with "unsupported_reason":"precise missing measurement". Ordering, posture, contact presence or absence, start and end states, and object placement ARE measurable - do not mark them unsupported. Do not mislabel a weaker proxy as verification. Supported requirements must each have at least one check; unsupported ones remain explicitly unverified and prevent a completed outcome. Do not omit or soften requirements merely to get a green result.
+Only authorize sliding_contacts if the request itself involves intentional sliding. Choose the scene that contains the requested object. If no available scene contains it, keep that missing scene requirement as unsupported; never pretend flat ground has the object.
+
+=== HUMAN ===
+Original request (authoritative):
+{USER_SKILL}

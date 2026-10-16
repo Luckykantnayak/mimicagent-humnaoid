@@ -1,0 +1,37 @@
+<mujoco model="hurdle scene">
+  <!-- Robot-AGNOSTIC hurdle environment: floor + a single low wall to clear.
+       Composed with a robot at load, like every other scene here.
+
+       WALL HEIGHT is deliberately under half the humanoid's standing height
+       (measured: 1.612 m tall, so half is 0.806 m). At 0.52 m the wall is a real
+       obstacle — hip height on this robot — and close to the ceiling of what it
+       can clear: the flight apex is capped at take-off height + the robot's 0.247 m
+       vertical, and take-off height is itself capped by leg reach over a foot that
+       is still moving at running speed.
+
+       It is placed at x = 3.40 so there is ~2.8 m of run-up from the home
+       keyframe at the origin: enough to accelerate from a stand into a genuine
+       running cadence before the take-off punch. -->
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="-130" elevation="-20" offwidth="1280" offheight="720"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+    <material name="hurdle" rgba="0.62 0.58 0.52 1" reflectance="0.05"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 2.5" dir="0 0 -1" directional="true"/>
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
+
+    <!-- Low wall: top surface z = 0.52, faces at x = 3.34 and x = 3.46,
+         1.40 m wide so the robot cannot sidestep it. -->
+    <geom name="hurdle" type="box" pos="3.40 0 0.26" size="0.06 0.70 0.26" material="hurdle"/>
+  </worldbody>
+</mujoco>
