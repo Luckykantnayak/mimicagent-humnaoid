@@ -3,18 +3,7 @@
 
 <div align="center">
 
-**From a skill prompt to a robot reference trajectory.**
-
-[Website](https://luckykantnayak.github.io/mimic-agent/) ·
-[arXiv Paper](https://arxiv.org/abs/2609.24145) ·
-[Architecture](docs/ARCHITECTURE.md)
-
-[![MuJoCo](https://img.shields.io/badge/MuJoCo-3.10-b.svg)](https://mujoco.readthedocs.io/)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-b.svg)](https://www.python.org/)
-[![Claude](https://img.shields.io/badge/LLM-Claude-b.svg)](https://www.anthropic.com/claude)
-[![LangGraph](https://img.shields.io/badge/LangGraph-agent-b.svg)](https://github.com/langchain-ai/langgraph)
-[![Linux platform](https://img.shields.io/badge/Platform-linux--64-orange.svg)](https://ubuntu.com/)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-yellow.svg)](LICENSE)
+[Website](https://luckykantnayak.github.io/mimic-agent/) · [arXiv](https://arxiv.org/abs/2609.24145)
 
 </div>
 
