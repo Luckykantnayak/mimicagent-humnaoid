@@ -3,7 +3,7 @@
 
 <div align="center">
 
-[Website](https://luckykantnayak.github.io/mimic-agent/) · [arXiv](https://arxiv.org/abs/2609.24145)
+[arXiv](https://arxiv.org/abs/2609.24145)
 
 </div>
 
